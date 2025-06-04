@@ -1,0 +1,16 @@
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\backend-csharp.exe
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\backend-csharp.deps.json
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\backend-csharp.runtimeconfig.json
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\backend-csharp.runtimeconfig.dev.json
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\backend-csharp.dll
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\ref\backend-csharp.dll
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\backend-csharp.pdb
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\backend-csharp.csproj.AssemblyReference.cache
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\backend-csharp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\backend-csharp.AssemblyInfoInputs.cache
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\backend-csharp.AssemblyInfo.cs
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\backend-csharp.csproj.CoreCompileInputs.cache
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\backend-csharp.dll
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\ref\backend-csharp.dll
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\backend-csharp.pdb
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\backend-csharp.genruntimeconfig.cache
