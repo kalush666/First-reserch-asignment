@@ -2,9 +2,9 @@
 {
     public abstract class User
     {
-        private int Id { get; set; }
-        private string Name { get; set; }
-        private decimal Age { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Age { get; set; }
 
         public User(int id,string name,decimal age)
         {

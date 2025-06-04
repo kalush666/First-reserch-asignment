@@ -14,3 +14,11 @@ C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp
 C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\ref\backend-csharp.dll
 C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\backend-csharp.pdb
 C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\backend-csharp.genruntimeconfig.cache
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\DnsClient.dll
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\MongoDB.Bson.dll
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\MongoDB.Driver.dll
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\SharpCompress.dll
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\Snappier.dll
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\ZstdSharp.dll
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\backend-csharp.csproj.CopyComplete

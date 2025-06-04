@@ -4,8 +4,8 @@ namespace backend_csharp.Models
 {
     public class Patient : User
     {
-        private List<string> Allergies { get; set; } = new();
-        private List<string> Medications { get; set; } = new();
+        public List<string> Allergies { get; set; } = new();
+        public List<string> Medications { get; set; } = new();
 
         public Patient(int id, string name, decimal age, List<string> allergies,List<string> medications) 
             : base(id, name, age) {
