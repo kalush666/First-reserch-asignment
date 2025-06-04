@@ -52,5 +52,17 @@ namespace backend_csharp.Services
                 return freeDays;
             });
         }
+
+        public void AnalyzeAppointmentsInParallel(List<Appointment> appointments)
+        {
+            Parallel.ForEach(appointments, appointment =>
+            {
+                if (appointment.AppointmentDateTime.Hour < 9)
+                {
+                    Console.WriteLine($"Early appointment at: {appointment.AppointmentDateTime}");
+                }
+            });
+        }
+
     }
 }
