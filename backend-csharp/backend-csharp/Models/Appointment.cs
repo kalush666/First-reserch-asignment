@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using backend_csharp.Models.Enums;
 
 namespace backend_csharp.Models
 {
@@ -8,6 +9,8 @@ namespace backend_csharp.Models
         public Doctor Doctor { get; set; }
         public Patient Patient { get; set; }
         public DateTime AppointmentDateTime { get; set; }
+
+        public AppointmentStatus Status { get; set; }
 
         public List<string> AppointmentReasons { get; set; }
         public Appointment(Doctor doctor, Patient patient,DateTime appointmentDateTime,List<string> appointmentReasons) {
