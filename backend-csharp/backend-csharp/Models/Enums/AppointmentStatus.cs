@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace backend_csharp.Models.Enums
 {
-    public  enum ApointmentStatus{ 
+    public enum AppointmentStatus
+    {
         Pending,
         Confirmed,
         Completed,
