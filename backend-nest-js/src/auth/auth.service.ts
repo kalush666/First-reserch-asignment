@@ -4,19 +4,55 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AuthDto } from './dto';
 import * as argon from 'argon2';
 import { UserRole } from '@prisma/client';
+import { SigninDto, SignupDto } from './dto';
 
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService) {}
 
-  signin(dto: AuthDto) {
-    return '';
+  async signin(dto: SigninDto) {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { email: dto.email },
+        include: {
+          doctor: true,
+          patient: true,
+        },
+      });
+
+      if (!user) {
+        throw new BadRequestException('Invalid credentials');
+      }
+
+      const passwordMatches = await argon.verify(user.password, dto.password);
+
+      if (!passwordMatches) {
+        throw new BadRequestException('Invalid credentials');
+      }
+
+      return {
+        message: 'Signin successful',
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          age: user.age,
+          role: user.role,
+          doctor: user.role === UserRole.DOCTOR ? user.doctor : null,
+          patient: user.role === UserRole.PATIENT ? user.patient : null,
+        },
+      };
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new BadRequestException('An error occurred during signin');
+    }
   }
 
-  async signup(dto: AuthDto) {
+  async signup(dto: SignupDto) {
     try {
       const existingUser = await this.prisma.user.findUnique({
         where: { email: dto.email },
@@ -33,7 +69,6 @@ export class AuthService {
       const hash = await argon.hash(dto.password);
 
       const result = await this.prisma.$transaction(async (prisma) => {
-        // Create base user
         const user = await prisma.user.create({
           data: {
             email: dto.email,

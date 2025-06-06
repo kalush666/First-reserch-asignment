@@ -1,15 +1,19 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  IsInt,
-  IsEnum,
-  IsOptional,
-  IsArray,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+
+export class SigninDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}
+
+import { IsInt, IsEnum, IsOptional, IsArray } from 'class-validator';
 import { UserRole, DoctorSpeciality } from '@prisma/client';
 
-export class AuthDto {
+export class SignupDto {
   @IsEmail()
   @IsNotEmpty()
   email: string;
