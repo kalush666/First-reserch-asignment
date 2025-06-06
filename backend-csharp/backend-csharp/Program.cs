@@ -1,22 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
+using backend_csharp.Services;
+using System.Threading.Tasks;
+
 
 namespace backend_csharp
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            var numbers = new List<int> { 1, 2, 3, 4, 5 };
+            var tcpServer = new TcpRequestHandler();
+            var cts = new CancellationTokenSource();
 
-            var query = from n in numbers
-                        where n % 2 == 0
-                        select n;
+            Console.CancelKeyPress += (sender, e) =>
+            {
+                Console.WriteLine("stopping server");
+                e.Cancel = true;
+                cts.Cancel();
+            };
 
-            foreach (var val in query) {
-                Console.WriteLine(val);
+            tcpServer.Start();
+
+            try
+            {
+                while (!cts.Token.IsCancellationRequested)
+                {
+                    await Task.Delay(1000, cts.Token);
+                }
             }
+            catch (TaskCanceledException) { }
+
+            tcpServer.Stop();
+            Console.WriteLine("server stopped");
         }
     }
 }
