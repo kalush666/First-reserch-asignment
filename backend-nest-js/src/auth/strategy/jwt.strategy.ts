@@ -1,8 +1,10 @@
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 
-export class JwtStrategy extends PassportStrategy(Strategy) {
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(config: ConfigService) {
     const secret = config.get('JWT_SECRET');
     if (!secret) {
@@ -13,7 +15,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: secret,
     });
   }
-  validate(...args: any[]): unknown {
-    throw new Error('Method not implemented.');
+  validate(payload: any) {
+    console.log(payload);
+
+    return payload;
   }
 }
