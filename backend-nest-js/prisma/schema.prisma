@@ -1,43 +1,61 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  age         Float
-  email       String   @unique
-  password    String
-  role        UserRole
-  speciality  DoctorSpeciality?
-  allergies   String[]
-  medications String[]
-  
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  age       Int
+  role      UserRole
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  doctor Doctor?
+
+  patient Patient?
+
   doctorAppointments  Appointment[] @relation("DoctorAppointments")
   patientAppointments Appointment[] @relation("PatientAppointments")
 }
 
+model Doctor {
+  id         Int               @id @default(autoincrement())
+  userId     Int               @unique
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  speciality DoctorSpeciality
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+}
+
+model Patient {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  allergies   String[]
+  medications String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model Appointment {
-  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
-  userDoctor          User     @relation("DoctorAppointments", fields: [doctorId], references: [id])
-  doctorId            String   @db.ObjectId
-  userPatient         User     @relation("PatientAppointments", fields: [patientId], references: [id])
-  patientId           String   @db.ObjectId
+  id                  Int               @id @default(autoincrement())
+  doctorId            Int
+  patientId           Int
   appointmentDateTime DateTime
-  status              AppointmentStatus
+  status              AppointmentStatus @default(Pending)
   appointmentReasons  String[]
-  createdAt           DateTime @default(now())
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  doctor  User @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  patient User @relation("PatientAppointments", fields: [patientId], references: [id])
 }
 
 enum AppointmentStatus {

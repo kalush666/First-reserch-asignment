@@ -2,10 +2,16 @@ version: '3.8'
 
 services:
   dev-db:
-    image: mongo:6
+    image: postgres:15
+    restart: always
     ports:
-      - '27017:27017'
+      - '5432:5432'
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: jonathan06
-      MONGO_INITDB_DATABASE: firstP
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: jonathan06
+      POSTGRES_DB: appointment_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

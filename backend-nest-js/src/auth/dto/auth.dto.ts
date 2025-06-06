@@ -2,7 +2,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsString,
-  IsNumber,
+  IsInt,
   IsEnum,
   IsOptional,
   IsArray,
@@ -22,7 +22,7 @@ export class AuthDto {
   @IsNotEmpty()
   name: string;
 
-  @IsNumber()
+  @IsInt()
   @IsNotEmpty()
   age: number;
 

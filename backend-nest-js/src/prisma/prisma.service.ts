@@ -7,7 +7,7 @@ export class PrismaService extends PrismaClient {
     super({
       datasources: {
         db: {
-          url: 'mongodb://root:jonathan06@localhost:27017/firstP?authSource=admin&retryWrites=true&w=majority',
+          url: 'postgresql://postgres:jonathan06@localhost:5432/appointment_db?schema=public',
         },
       },
     });
