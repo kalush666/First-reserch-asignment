@@ -1,41 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace backend_csharp.Utils
 {
-    class JsonHandler
+    public static class JsonHandler
     {
-        private static readonly JsonSerializerOptions _options = new JsonSerializerOptions
+        private static readonly JsonSerializerSettings _settings = new JsonSerializerSettings
         {
-            PropertyNameCaseInsensitive = true,
-            WriteIndented = false,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            NullValueHandling = NullValueHandling.Ignore,
+            Formatting = Formatting.None
         };
 
-        public static string ToJson<T>(T obj) {
+        public static string ToJson<T>(T obj)
+        {
             try
             {
-                return JsonSerializer.Serialize(obj, _options);
-            } catch (Exception ex) {
-                Console.WriteLine($"Serialization arror: {ex.Message}");
+                return JsonConvert.SerializeObject(obj, _settings);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Serialization error: {ex.Message}");
                 return string.Empty;
             }
         }
 
-        public static T? FromJson<T>(string json) {
+        public static T? FromJson<T>(string json)
+        {
             try
             {
-                return JsonSerializer.Deserialize<T>(json, _options);
+                return JsonConvert.DeserializeObject<T>(json, _settings);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine($"Deserialize error: {ex.Message}");
                 return default;
-            }   
+            }
         }
     }
 }
