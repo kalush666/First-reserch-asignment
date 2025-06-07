@@ -62,25 +62,53 @@ namespace backend_csharp.Services
             try
             {
                 using var stream = client.GetStream();
-                using var reader = new StreamReader(stream, Encoding.UTF8);
-                using var writer = new StreamWriter(stream, Encoding.UTF8) { AutoFlush = true };
 
-                char[] buffer = new char[8192];
-                int chars = await reader.ReadAsync(buffer, 0, buffer.Length);
-                string jsonInput = new string(buffer, 0, chars);
+                var buffer = new byte[8192];
+                var totalBytes = 0;
+                var requestData = new List<byte>();
+
+                while (stream.DataAvailable || totalBytes == 0)
+                {
+                    var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                    if (bytesRead == 0) break;
+
+                    for (int i = 0; i < bytesRead; i++)
+                    {
+                        requestData.Add(buffer[i]);
+                    }
+                    totalBytes += bytesRead;
+
+                    if (stream.DataAvailable)
+                        await Task.Delay(10);
+                    else
+                        break;
+                }
+
+                string jsonInput = Encoding.UTF8.GetString(requestData.ToArray());
 
                 lock (_lock)
                 {
-                    Console.WriteLine("Received data");
+                    Console.WriteLine($"Received data: {jsonInput}");
+                    Console.WriteLine($"Received bytes: {totalBytes}");
                 }
 
                 var request = JsonHandler.FromJson<AnalysisRequest>(jsonInput);
 
-                if (request == null || request.Appointments == null)
+                if (request == null)
                 {
-                    await writer.WriteAsync("[]");
+                    Console.WriteLine("Failed to deserialize request - request is null");
+                    await SendResponse(stream, "[]");
                     return;
                 }
+
+                if (request.Appointments == null)
+                {
+                    Console.WriteLine("Failed to deserialize request - appointments is null");
+                    await SendResponse(stream, "[]");
+                    return;
+                }
+
+                Console.WriteLine($"Processing {request.Appointments.Count} appointments for type: {request.Type}");
 
                 List<DateTime> result;
 
@@ -94,15 +122,47 @@ namespace backend_csharp.Services
                 }
 
                 var responseJson = JsonHandler.ToJson(result);
-                await writer.WriteAsync(responseJson);
+                Console.WriteLine($"Sending response: {responseJson}");
+                await SendResponse(stream, responseJson);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in client handler: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+
+                try
+                {
+                    await SendResponse(client.GetStream(), "[]");
+                }
+                catch
+                {
+                }
             }
             finally
             {
-                client.Close();
+                try
+                {
+                    client.Close();
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        private async Task SendResponse(NetworkStream stream, string response)
+        {
+            try
+            {
+                var responseBytes = Encoding.UTF8.GetBytes(response);
+                await stream.WriteAsync(responseBytes, 0, responseBytes.Length);
+                await stream.FlushAsync();
+
+                stream.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending response: {ex.Message}");
             }
         }
     }

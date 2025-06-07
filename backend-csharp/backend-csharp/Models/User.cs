@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public decimal Age { get; set; }
+        public int Age { get; set; }
 
-        public User(int id,string name,decimal age)
+        public User(int id,string name,int age)
         {
             this.Id = id;
             this.Name = name;

@@ -9,7 +9,7 @@
             Speciality = "Unknown";
         }
 
-        public Doctor(int id, string name, decimal age, string speciality)
+        public Doctor(int id, string name, int age, string speciality)
             : base(id, name, age)
         {
             Speciality = speciality;

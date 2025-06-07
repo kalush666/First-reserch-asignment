@@ -14,14 +14,14 @@ namespace backend_csharp.Models
             Medications = new List<string>();
         }
 
-        public Patient(int id, string name, decimal age, List<string> allergies, List<string> medications)
+        public Patient(int id, string name, int age, List<string> allergies, List<string> medications)
             : base(id, name, age)
         {
             Allergies = allergies;
             Medications = medications;
         }
 
-        public Patient(int id, string name, decimal age)
+        public Patient(int id, string name, int age)
             : base(id, name, age)
         {
         }
