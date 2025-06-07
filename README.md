@@ -196,7 +196,7 @@ networks:
 | API Backend   | NestJS (TypeScript)            |
 | Auth          | JWT + Guards + Decorators      |
 | DB Access     | Prisma ORM with Postgresql     |
-| Microservice  | C# .NET 6                      |
+| Microservice  | C# .NET 5                      |
 | Communication | TCP Socket (net + TcpListener) |
 
 ---
