@@ -22,3 +22,4 @@ C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp
 C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\Snappier.dll
 C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\ZstdSharp.dll
 C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\obj\Debug\net5.0\backend-csharp.csproj.CopyComplete
+C:\Users\jonat\Desktop\PROJECTS\appointment-system\backend-csharp\backend-csharp\bin\Debug\net5.0\Newtonsoft.Json.dll

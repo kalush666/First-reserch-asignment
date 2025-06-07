@@ -33,6 +33,7 @@ export async function sendToTcpServer(
     client.connect(PORT, HOST, () => {
       const json = JSON.stringify(payload);
       client.write(json);
+      client.end();
     });
 
     let response = '';

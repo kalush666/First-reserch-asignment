@@ -9,6 +9,7 @@ import { CreateAppointmentDto } from './dto';
 import { UserRole, AppointmentStatus } from '@prisma/client';
 import { sendToTcpServer } from 'src/utils/socket-client';
 
+import { DoctorSpeciality } from 'src/common/enums/doctorspeciality.enum';
 @Injectable()
 export class AppointmentsService {
   constructor(private prisma: PrismaService) {}
@@ -192,6 +193,7 @@ export class AppointmentsService {
           select: {
             id: true,
             name: true,
+            age: true,
             doctor: { select: { speciality: true } },
           },
         },
@@ -199,16 +201,13 @@ export class AppointmentsService {
           select: {
             id: true,
             name: true,
-            patient: {
-              select: {
-                allergies: true,
-                medications: true,
-              },
-            },
+            age: true,
+            patient: { select: { allergies: true, medications: true } },
           },
         },
       },
     });
+
     const workingDays =
       type === 'free' ? this.getUpcomingWorkingDays() : undefined;
 
@@ -218,11 +217,14 @@ export class AppointmentsService {
         doctor: {
           id: a.doctor.id,
           name: a.doctor.name,
-          speciality: a.doctor.doctor?.speciality ?? 'Unknown',
+          age: a.doctor.age,
+          speciality:
+            (a.doctor.doctor?.speciality as DoctorSpeciality) ?? 'Unknown',
         },
         patient: {
           id: a.patient.id,
           name: a.patient.name,
+          age: a.patient.age,
           allergies: a.patient.patient?.allergies ?? [],
           medications: a.patient.patient?.medications ?? [],
         },

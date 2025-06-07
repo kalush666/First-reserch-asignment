@@ -65,7 +65,9 @@ namespace backend_csharp.Services
                 using var reader = new StreamReader(stream, Encoding.UTF8);
                 using var writer = new StreamWriter(stream, Encoding.UTF8) { AutoFlush = true };
 
-                var jsonInput = await reader.ReadToEndAsync();
+                char[] buffer = new char[8192];
+                int chars = await reader.ReadAsync(buffer, 0, buffer.Length);
+                string jsonInput = new string(buffer, 0, chars);
 
                 lock (_lock)
                 {

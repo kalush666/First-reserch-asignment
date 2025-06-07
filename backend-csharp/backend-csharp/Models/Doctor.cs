@@ -1,19 +1,23 @@
-﻿using backend_csharp.Models.Enums;
-
-namespace backend_csharp.Models
+﻿namespace backend_csharp.Models
 {
     public class Doctor : User
     {
-        public DoctorSpeciality Speciality { get; set; }
+        public string Speciality { get; set; }
 
-        public Doctor(int id, string name, decimal age, DoctorSpeciality speciality)
-            : base(id, name, age) {
-            this.Speciality = speciality;
+        public Doctor() : base(0, "", 0)
+        {
+            Speciality = "Unknown";
+        }
+
+        public Doctor(int id, string name, decimal age, string speciality)
+            : base(id, name, age)
+        {
+            Speciality = speciality;
         }
 
         public override string ToString()
         {
-            return base.ToString() + $"Speciality {Speciality}";
+            return base.ToString() + $" | Speciality: {Speciality}";
         }
     }
 }

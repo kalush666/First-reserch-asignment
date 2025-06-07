@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace backend_csharp.Models
 {
@@ -7,14 +8,23 @@ namespace backend_csharp.Models
         public List<string> Allergies { get; set; } = new();
         public List<string> Medications { get; set; } = new();
 
-        public Patient(int id, string name, decimal age, List<string> allergies,List<string> medications) 
-            : base(id, name, age) {
-            this.Allergies = allergies;
-            this.Medications = medications;
+        public Patient() : base(0, "", 0)
+        {
+            Allergies = new List<string>();
+            Medications = new List<string>();
+        }
+
+        public Patient(int id, string name, decimal age, List<string> allergies, List<string> medications)
+            : base(id, name, age)
+        {
+            Allergies = allergies;
+            Medications = medications;
         }
 
         public Patient(int id, string name, decimal age)
-            : base(id, name, age) { }
+            : base(id, name, age)
+        {
+        }
 
         public override string ToString()
         {

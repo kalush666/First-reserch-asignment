@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using backend_csharp.Models.Enums;
 
 namespace backend_csharp.Models
 {
@@ -9,15 +8,30 @@ namespace backend_csharp.Models
         public Doctor Doctor { get; set; }
         public Patient Patient { get; set; }
         public DateTime AppointmentDateTime { get; set; }
-
-        public AppointmentStatus Status { get; set; }
-
+        public string Status { get; set; }
         public List<string> AppointmentReasons { get; set; }
-        public Appointment(Doctor doctor, Patient patient,DateTime appointmentDateTime,List<string> appointmentReasons) {
-            this.Doctor = doctor;
-            this.Patient = patient;
-            this.AppointmentDateTime = appointmentDateTime;
-            this.AppointmentReasons = appointmentReasons;
+
+        public Appointment()
+        {
+            Doctor = new Doctor();
+            Patient = new Patient();
+            AppointmentDateTime = DateTime.Now;
+            Status = "Pending";
+            AppointmentReasons = new List<string>();
+        }
+
+        public Appointment(Doctor doctor, Patient patient, DateTime appointmentDateTime, List<string> appointmentReasons)
+        {
+            Doctor = doctor;
+            Patient = patient;
+            AppointmentDateTime = appointmentDateTime;
+            Status = "Pending";
+            AppointmentReasons = appointmentReasons;
+        }
+
+        public override string ToString()
+        {
+            return $"Doctor: {Doctor}, Patient: {Patient}, Date: {AppointmentDateTime}, Status: {Status}";
         }
     }
 }
