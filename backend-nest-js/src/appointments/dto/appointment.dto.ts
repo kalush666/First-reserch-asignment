@@ -6,27 +6,33 @@ import {
   IsInt,
   IsNotEmpty,
   IsOptional,
+  IsString,
 } from 'class-validator';
 
 export class CreateAppointmentDto {
   @IsInt()
+  @IsNotEmpty()
   doctorId: number;
 
   @IsInt()
+  @IsNotEmpty()
   patientId: number;
 
   @IsDateString()
-  appointmentDate: string;
+  @IsNotEmpty()
+  appointmentDateTime: string;
 
   @IsEnum(AppointmentStatus)
-  status: AppointmentStatus;
+  @IsOptional()
+  status?: AppointmentStatus;
 
   @IsArray()
-  @IsNotEmpty()
-  appointmentReasons: string[];
+  @IsString({ each: true })
+  @IsOptional()
+  appointmentReasons?: string[];
 }
 
-export class FindAppountmetDto {
+export class FindAppointmentDto {
   @IsOptional()
   @IsInt()
   doctorId?: number;
@@ -38,4 +44,10 @@ export class FindAppountmetDto {
   @IsOptional()
   @IsEnum(AppointmentStatus)
   status?: AppointmentStatus;
+}
+
+export class UpdateAppointmentStatusDto {
+  @IsEnum(AppointmentStatus)
+  @IsNotEmpty()
+  status: AppointmentStatus;
 }
