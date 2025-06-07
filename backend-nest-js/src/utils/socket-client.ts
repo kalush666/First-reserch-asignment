@@ -2,10 +2,26 @@ import { CreateAppointmentDto } from 'src/appointments/dto';
 import * as net from 'net';
 
 export interface AppointmentRequest {
-  type: 'busy' | 'available';
-  appointments: CreateAppointmentDto[];
+  type: 'busy' | 'free';
+  appointments: {
+    doctor: {
+      id: number;
+      name: string;
+      speciality: string;
+    };
+    patient: {
+      id: number;
+      name: string;
+      allergies: string[];
+      medications: string[];
+    };
+    appointmentDateTime: Date;
+    status: string;
+    appointmentReasons: string[];
+  }[];
   workingDays?: string[];
 }
+
 export async function sendToTcpServer(
   payload: AppointmentRequest,
 ): Promise<string> {

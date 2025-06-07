@@ -13,6 +13,7 @@ import {
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto, UpdateAppointmentStatusDto } from './dto';
 import { GetUser } from '../auth/decorator';
+import { sendToTcpServer } from 'src/utils/socket-client';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -53,5 +54,11 @@ export class AppointmentsController {
       appointmentId,
       dto.status,
     );
+  }
+
+  @Post('analyze-load')
+  @HttpCode(HttpStatus.OK)
+  analyzeLoad(@Body() dto: { type: 'busy' | 'free' }) {
+    return this.appointmentsService.analyzeLoad(dto.type);
   }
 }

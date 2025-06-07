@@ -7,6 +7,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAppointmentDto } from './dto';
 import { UserRole, AppointmentStatus } from '@prisma/client';
+import { sendToTcpServer } from 'src/utils/socket-client';
 
 @Injectable()
 export class AppointmentsService {
@@ -182,5 +183,70 @@ export class AppointmentsService {
       message: 'Appointment status updated successfully',
       appointment: updatedAppointment,
     };
+  }
+
+  async analyzeLoad(type: 'busy' | 'free') {
+    const appointments = await this.prisma.appointment.findMany({
+      include: {
+        doctor: {
+          select: {
+            id: true,
+            name: true,
+            doctor: { select: { speciality: true } },
+          },
+        },
+        patient: {
+          select: {
+            id: true,
+            name: true,
+            patient: {
+              select: {
+                allergies: true,
+                medications: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    const workingDays =
+      type === 'free' ? this.getUpcomingWorkingDays() : undefined;
+
+    const payload = {
+      type,
+      appointments: appointments.map((a) => ({
+        doctor: {
+          id: a.doctor.id,
+          name: a.doctor.name,
+          speciality: a.doctor.doctor?.speciality ?? 'Unknown',
+        },
+        patient: {
+          id: a.patient.id,
+          name: a.patient.name,
+          allergies: a.patient.patient?.allergies ?? [],
+          medications: a.patient.patient?.medications ?? [],
+        },
+        appointmentDateTime: a.appointmentDateTime,
+        status: a.status,
+        appointmentReasons: a.appointmentReasons,
+      })),
+      workingDays,
+    };
+
+    const result = await sendToTcpServer(payload);
+    return JSON.parse(result);
+  }
+
+  private getUpcomingWorkingDays(): string[] {
+    const today = new Date();
+    const days: string[] = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(today);
+      d.setDate(d.getDate() + i);
+      if (d.getDay() !== 0 && d.getDay() !== 6) {
+        days.push(d.toISOString().split('T')[0]);
+      }
+    }
+    return days;
   }
 }
