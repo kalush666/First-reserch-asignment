@@ -164,17 +164,23 @@ sendToTcpServer()  →  TcpListener.Accept()
 `docker-compose.yml`:
 ```yaml
 version: '3.8'
+
 services:
   dev-db:
-    image: postgres
+    image: postgres:15
+    restart: always
     ports:
-      - 27017:27017
+      - '5432:5432'
     environment:
-      PostgresQL_INITDB_DATABASE: firstP
-    networks:
-      - app-network
-networks:
-  app-network:
+      POSTGRES_USER: USERNAME
+      POSTGRES_PASSWORD: PASSWORD
+      POSTGRES_DB: DBNAME
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
 ```
 
 ---
