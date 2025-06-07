@@ -187,56 +187,91 @@ export class AppointmentsService {
   }
 
   async analyzeLoad(type: 'busy' | 'free') {
-    const appointments = await this.prisma.appointment.findMany({
-      include: {
-        doctor: {
-          select: {
-            id: true,
-            name: true,
-            age: true,
-            doctor: { select: { speciality: true } },
+    try {
+      const appointments = await this.prisma.appointment.findMany({
+        include: {
+          doctor: {
+            select: {
+              id: true,
+              name: true,
+              age: true,
+              doctor: { select: { speciality: true } },
+            },
+          },
+          patient: {
+            select: {
+              id: true,
+              name: true,
+              age: true,
+              patient: { select: { allergies: true, medications: true } },
+            },
           },
         },
-        patient: {
-          select: {
-            id: true,
-            name: true,
-            age: true,
-            patient: { select: { allergies: true, medications: true } },
+      });
+
+      const workingDays =
+        type === 'free' ? this.getUpcomingWorkingDays() : undefined;
+
+      const payload = {
+        type,
+        appointments: appointments.map((a) => ({
+          doctor: {
+            id: a.doctor.id,
+            name: a.doctor.name,
+            age: a.doctor.age,
+            speciality: a.doctor.doctor?.speciality ?? 'Unknown',
           },
-        },
-      },
-    });
+          patient: {
+            id: a.patient.id,
+            name: a.patient.name,
+            age: a.patient.age,
+            allergies: a.patient.patient?.allergies ?? [],
+            medications: a.patient.patient?.medications ?? [],
+          },
+          appointmentDateTime: a.appointmentDateTime,
+          status: a.status,
+          appointmentReasons: a.appointmentReasons,
+        })),
+        workingDays,
+      };
 
-    const workingDays =
-      type === 'free' ? this.getUpcomingWorkingDays() : undefined;
+      console.log(
+        'Sending payload to TCP server:',
+        JSON.stringify(payload, null, 2),
+      );
 
-    const payload = {
-      type,
-      appointments: appointments.map((a) => ({
-        doctor: {
-          id: a.doctor.id,
-          name: a.doctor.name,
-          age: a.doctor.age,
-          speciality:
-            (a.doctor.doctor?.speciality as DoctorSpeciality) ?? 'Unknown',
-        },
-        patient: {
-          id: a.patient.id,
-          name: a.patient.name,
-          age: a.patient.age,
-          allergies: a.patient.patient?.allergies ?? [],
-          medications: a.patient.patient?.medications ?? [],
-        },
-        appointmentDateTime: a.appointmentDateTime,
-        status: a.status,
-        appointmentReasons: a.appointmentReasons,
-      })),
-      workingDays,
-    };
+      const result = await sendToTcpServer(payload);
+      console.log('Received result from TCP server:', result);
+      console.log('Result length:', result.length);
+      console.log('Result bytes:', Buffer.from(result).toString('hex'));
 
-    const result = await sendToTcpServer(payload);
-    return JSON.parse(result);
+      // Handle empty or invalid response
+      if (!result || result.trim() === '' || result.trim() === '[]') {
+        return {
+          message: 'Analysis completed - no results from TCP server',
+          type,
+          data: [],
+          originalPayload: payload,
+        };
+      }
+
+      const cleanResult = result.trim().replace(/^\uFEFF/, '');
+
+      try {
+        return JSON.parse(cleanResult);
+      } catch (parseError) {
+        console.error('JSON parse error:', parseError);
+        return {
+          message: 'Analysis completed - invalid response format',
+          type,
+          rawResponse: result,
+          originalPayload: payload,
+        };
+      }
+    } catch (error) {
+      console.error('Error in analyzeLoad:', error);
+      throw new BadRequestException(`Failed to analyze load: ${error.message}`);
+    }
   }
 
   private getUpcomingWorkingDays(): string[] {

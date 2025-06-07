@@ -30,24 +30,32 @@ export async function sendToTcpServer(
     const PORT = 5000;
     const HOST = '127.0.0.1';
 
+    client.setTimeout(10000); // 10 second timeout
+
     client.connect(PORT, HOST, () => {
       const json = JSON.stringify(payload);
-      client.write(json);
-      client.end();
+      client.write(json, 'utf8'); // Specify encoding
     });
 
     let response = '';
 
     client.on('data', (data) => {
-      response += data.toString();
+      response += data.toString('utf8');
     });
 
     client.on('end', () => {
+      console.log('Raw response received:', response);
+      console.log('Response length:', response.length);
       resolve(response);
     });
 
     client.on('error', (err) => {
-      reject(err);
+      reject(new Error(`TCP connection failed: ${err.message}`));
+    });
+
+    client.on('timeout', () => {
+      client.destroy();
+      reject(new Error('TCP connection timeout'));
     });
   });
 }
